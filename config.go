@@ -219,7 +219,12 @@ const (
 // support Compiler. Use NewRuntimeConfig to safely detect and fallback to
 // NewRuntimeConfigInterpreter if needed.
 func NewRuntimeConfigCompiler() RuntimeConfig {
-	ret := engineLessConfig.clone()
+	ret := &runtimeConfig{
+		enabledFeatures:       api.CoreFeaturesV2,
+		memoryLimitPages:      wasm.MemoryLimitPages,
+		memoryCapacityFromMax: false,
+		dwarfDisabled:         false,
+	}
 	ret.engineKind = engineKindCompiler
 	ret.newEngine = compiler.NewEngine
 	return ret
@@ -227,7 +232,12 @@ func NewRuntimeConfigCompiler() RuntimeConfig {
 
 // NewRuntimeConfigInterpreter interprets WebAssembly modules instead of compiling them into assembly.
 func NewRuntimeConfigInterpreter() RuntimeConfig {
-	ret := engineLessConfig.clone()
+	ret := &runtimeConfig{
+		enabledFeatures:       api.CoreFeaturesV2,
+		memoryLimitPages:      wasm.MemoryLimitPages,
+		memoryCapacityFromMax: false,
+		dwarfDisabled:         false,
+	}
 	ret.engineKind = engineKindInterpreter
 	ret.newEngine = interpreter.NewEngine
 	return ret
